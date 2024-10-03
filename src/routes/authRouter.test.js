@@ -5,23 +5,24 @@ if (process.env.VSCODE_INSPECTOR_OPTIONS) {
     jest.setTimeout(60 * 1000 * 5); // 5 minutes
   }
 
-const testUser = { name: 'pizza diner', email: 'reg@test.com', password: 'a' };
+const testUserData = { name: 'pizza diner', email: 'reg@test.com', password: 'a' };
+let testUser;
 let testUserAuthToken;
+let userId;
 
 beforeAll(async () => {
-  testUser.email = Math.random().toString(36).substring(2, 12) + '@test.com';
-  const registerRes = await request(app).post('/api/auth').send(testUser);
-  testUserAuthToken = registerRes.body.token;
-  userId = registerRes.body.user.id;
+    testUserData.email = Math.random().toString(36).substring(2, 12) + '@test.com';
+    const registerRes = await request(app).post('/api/auth').send(testUserData);
+    testUserAuthToken = registerRes.body.token;
+    userId = registerRes.body.user.id;
+    testUser = registerRes.body.user;
 });
 
 test('login', async () => {
-  const loginRes = await request(app).put('/api/auth').send(testUser);
-  expect(loginRes.status).toBe(200);
-  expect(loginRes.body.token).toMatch(/^[a-zA-Z0-9\-_]*\.[a-zA-Z0-9\-_]*\.[a-zA-Z0-9\-_]*$/);
-
-  const { password, ...user } = { ...testUser, roles: [{ role: 'diner' }] };
-  expect(loginRes.body.user).toMatchObject(user);
+    const loginRes = await request(app).put('/api/auth').send(testUserData);
+    expect(loginRes.status).toBe(200);
+    expect(loginRes.body.token).toMatch(/^[a-zA-Z0-9\-_]*\.[a-zA-Z0-9\-_]*\.[a-zA-Z0-9\-_]*$/);
+    expect(loginRes.body.user).toMatchObject(testUser);
 });
 
 test('update user', async () => {

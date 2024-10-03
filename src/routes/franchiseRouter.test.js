@@ -11,7 +11,6 @@ let storeId;
 
 let adminUser;
 let adminAuthToken;
-let adminId;
 
 let testUser;
 let testUserAuthToken;
@@ -36,9 +35,9 @@ beforeAll(async () => {
   adminUser = await createAdminUser();
   const loginRes = await request(app).put('/api/auth').send({ email: adminUser.email, password: adminUser.password });
   adminAuthToken = loginRes.body.token;
-  adminId = loginRes.body.user.id;
 
   testUser = { name: 'pizza diner', email: 'reg@test.com', password: 'a' };
+  testUser.email = randomName() + '@test.com';
   const registerRes = await request(app).post('/api/auth').send(testUser);
   testUserAuthToken = registerRes.body.token;
   userId = registerRes.body.user.id

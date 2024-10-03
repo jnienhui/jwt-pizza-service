@@ -19,7 +19,7 @@ beforeAll(async () => {
 });
 
 test('register invalid user', async () => {
-    registerUserData = {name: 'invalid', email: 'invalid@test.com'};
+    let registerUserData = {name: 'invalid', email: 'invalid@test.com'};
     const registerRes = await request(app).post('/api/auth').send(registerUserData);
     expect(registerRes.status).toBe(400);
     expect(registerRes.body.message).toMatch('name, email, and password are required');

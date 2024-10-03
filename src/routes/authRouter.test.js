@@ -18,6 +18,13 @@ beforeAll(async () => {
     testUser = registerRes.body.user;
 });
 
+test('register invalid user', async () => {
+    registerUserData = {name: 'invalid', email: 'invalid@test.com'};
+    const registerRes = await request(app).post('/api/auth').send(registerUserData);
+    expect(registerRes.status).toBe(400);
+    expect(registerRes.body.message).toMatch('name, email, and password are required');
+});
+
 test('login', async () => {
     const loginRes = await request(app).put('/api/auth').send(testUserData);
     expect(loginRes.status).toBe(200);
@@ -61,6 +68,15 @@ test('logout user', async () => {
   });
   
 test('logout without auth token should fail', async () => {
+    const logoutRes = await request(app)
+        .delete('/api/auth')
+        .set('Authorization', `Bearer dadmsadma`);
+
+    expect(logoutRes.status).toBe(401);
+    expect(logoutRes.body.message).toBe('unauthorized');
+});
+
+test('logout with nonexistent auth token should fail', async () => {
     const logoutRes = await request(app)
         .delete('/api/auth'); 
 

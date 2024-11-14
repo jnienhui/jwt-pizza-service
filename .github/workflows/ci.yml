@@ -96,7 +96,6 @@ jobs:
         with:
           name: package
           path: dist/
-  
   deploy:
     runs-on: ubuntu-latest
     permissions:

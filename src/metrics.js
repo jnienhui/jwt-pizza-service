@@ -9,27 +9,25 @@ class Metrics {
     this.authAttempts = { success: 0, failure: 0 };
     this.pizzaMetrics = { sold: 0, creationFailures: 0, revenue: 0, latencies: [] };
     this.serviceLatency = [];
-    // Periodically send all metrics to Grafana
-    this.startPeriodicReporting(10000);
   }
 
   // Middleware to track HTTP request metrics
+  // requestTracker = (req, res, next) => {
+  //   const method = req.method;
+  //   console.log(method);
+  //   this.incrementRequests(method);
+  //   next();
+  // };
   requestTracker(req, res, next) {
-    const method = req.method.toUpperCase();
+    const method = req.method;
+    console.log(method);
     this.incrementRequests(method);
     next();
   }
   
   // Middleware to track request latency
-  latencyTracker(req, res, next) {
-    const startTime = Date.now();
-    
-    res.on('finish', () => {
-      const latency = Date.now() - startTime;
-      this.serviceLatency.push(latency); // Track the latency
-    });
-
-    next();
+  addLatency(latency) {
+    this.serviceLatency.push(latency);
   }
 
   incrementRequests(method) {

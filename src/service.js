@@ -18,6 +18,18 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(metrics.requestTracker.bind(metrics));
+app.use((req, res, next) => {
+  const startTime = Date.now();
+    
+    res.on('finish', () => {
+      const latency = Date.now() - startTime;
+      metrics.addLatency(latency);
+    });
+
+    next();
+});
+
 const apiRouter = express.Router();
 app.use('/api', apiRouter);
 apiRouter.use('/auth', authRouter);
@@ -51,7 +63,5 @@ app.use((err, req, res, next) => {
   next();
 });
 
-app.use(metrics.requestTracker);
-app.use(metrics.latencyTracker);
 
 module.exports = app;

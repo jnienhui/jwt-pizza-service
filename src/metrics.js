@@ -137,8 +137,8 @@ class Metrics {
     this.latencies = [];
   }
 
-  sendMetricToGrafana(metricPrefix, category, metricName, metricValue) {
-    const metric = `${metricPrefix},source=${config.metrics.source},category=${category} ${metricName}=${metricValue}`;
+  sendMetricToGrafana(metricPrefix, method, metricName, metricValue) {
+    const metric = `${metricPrefix},source=${config.metrics.source},method=${method} ${metricName}=${metricValue}`;
 
     fetch(`${config.url}`, {
       method: 'POST',

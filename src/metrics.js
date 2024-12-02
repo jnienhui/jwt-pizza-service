@@ -55,7 +55,7 @@ class Metrics {
     }
   }
 
-  recordPizzaSale(revenue, numberOfItems, latency, success = true) {
+  recordPizzaSale(revenue, numberOfItems, latency, success) {
     if (success) {
       this.pizzaMetrics.sold =+ numberOfItems;
       this.pizzaMetrics.revenue += revenue;

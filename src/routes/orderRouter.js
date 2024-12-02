@@ -95,7 +95,7 @@ orderRouter.post(
     if (r.ok) {
       const revenue = order.items.reduce((sum, item) => sum + item.price, 0);
       const numberOfItems = order.items.length;
-      recordPizzaSale(revenue, numberOfItems, latency, true)
+      metrics.recordPizzaSale(revenue, numberOfItems, pizzaLatency, true)
       res.send({ order, jwt: j.jwt, reportUrl: j.reportUrl });
     } else {
       metrics.recordPizzaSale(0, 0, pizzaLatency, false);

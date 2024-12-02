@@ -8,7 +8,8 @@ class Metrics {
     this.activeUsersCount = 0;
     this.authSuccess = 0;
     this.authFailure = 0;
-    this.pizzaMetrics = { sold: 0, creationFailures: 0, revenue: 0, latencies: [] };
+    this.pizzaMetrics = { sold: 0, creationFailures: 0, revenue: 0};
+    this.pizzaLatency = [];
     this.serviceLatency = [];
   }
 
@@ -31,6 +32,10 @@ class Metrics {
     this.serviceLatency.push(latency);
   }
 
+  addPizzaLatency(latency){
+    this.pizzaLatency.push(latency);
+  }
+
   incrementRequests(method) {
     this.totalRequests++;
     if (this.requestsByMethod[method] !== undefined) {
@@ -38,11 +43,10 @@ class Metrics {
     }
   }
 
-  recordPizzaSale(revenue, numberOfItems, latency, success) {
+  recordPizzaSale(revenue, numberOfItems, success) {
     if (success) {
       this.pizzaMetrics.sold =+ numberOfItems;
       this.pizzaMetrics.revenue += revenue;
-      this.pizzaMetrics.latencies.push(latency);
     } else {
       this.pizzaMetrics.creationFailures++;
     }
@@ -105,14 +109,14 @@ class Metrics {
     this.sendMetricToGrafana('pizzas', 'all', 'failures', this.pizzaMetrics.creationFailures);
 
     // Calculate average latency
-    const latencies = this.pizzaMetrics.latencies;
+    const latencies = this.pizzaLatency;
     if (latencies.length > 0) {
       const averageLatency = (latencies.reduce((a, b) => a + b, 0) / latencies.length).toFixed(2);
       this.sendMetricToGrafana('pizzas', 'all', 'average_latency', averageLatency);
     }
 
     // Reset latencies to avoid duplication in the next report
-    this.pizzaMetrics.latencies = [];
+    this.pizzaLatency = [];
   }
 
   sendServiceLatencyMetrics() {

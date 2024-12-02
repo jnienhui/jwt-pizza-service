@@ -79,9 +79,6 @@ orderRouter.post(
   authRouter.authenticateToken,
   asyncHandler(async (req, res) => {
     const orderReq = req.body;
-
-    const pizzaStartTime = Date.now();
-
     const order = await DB.addDinerOrder(req.user, orderReq);
     const r = await fetch(`${config.factory.url}/api/order`, {
       method: 'POST',
@@ -90,7 +87,6 @@ orderRouter.post(
     });
 
     const j = await r.json();
-    const pizzaLatency = Date.now() - pizzaStartTime;
 
     if (r.ok) {
       let revenue = 0;
@@ -99,8 +95,8 @@ orderRouter.post(
       }
       const numberOfItems = orderReq.items.length;
       console.log("requestbody: ", orderReq);
-      metrics.recordPizzaSale(revenue, numberOfItems, pizzaLatency, true)
-      
+      metrics.recordPizzaSale(revenue, numberOfItems, true)
+
       res.send({ order, jwt: j.jwt, reportUrl: j.reportUrl });
     } else {
       metrics.recordPizzaSale(0, 0, pizzaLatency, false);

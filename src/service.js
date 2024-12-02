@@ -24,6 +24,9 @@ app.use((req, res, next) => {
     
     res.on('finish', () => {
       const latency = Date.now() - startTime;
+      if (req.method == 'POST' && req.originalUrl == '/api/order'){
+        metrics.addPizzaLatency(latency);
+      }
       metrics.addLatency(latency);
     });
 

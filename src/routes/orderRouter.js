@@ -94,12 +94,13 @@ orderRouter.post(
 
     if (r.ok) {
       let revenue = 0;
-      for (let i = 0; i < req.body.items.length; i++){
-        revenue += req.body.items[i].price;
+      for (let i = 0; i < orderReq.items.length; i++){
+        revenue += orderReq.items[i].price;
       }
-      const numberOfItems = req.body.items.length;
-      console.log('pizza latency: %d, revenue: %d, numberofItems: %d', pizzaLatency, revenue, numberOfItems)
+      const numberOfItems = orderReq.items.length;
+      console.log("requestbody: ", orderReq);
       metrics.recordPizzaSale(revenue, numberOfItems, pizzaLatency, true)
+      
       res.send({ order, jwt: j.jwt, reportUrl: j.reportUrl });
     } else {
       metrics.recordPizzaSale(0, 0, pizzaLatency, false);

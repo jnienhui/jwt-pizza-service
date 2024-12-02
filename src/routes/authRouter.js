@@ -59,7 +59,6 @@ async function setAuthUser(req, res, next) {
 authRouter.authenticateToken = (req, res, next) => {
   if (!req.user) {
     metrics.authFailure++;
-
     return res.status(401).send({ message: 'unauthorized' });
   }
   next();
@@ -71,6 +70,7 @@ authRouter.post(
   asyncHandler(async (req, res) => {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
+      metrics.authFailure++;
       return res.status(400).json({ message: 'name, email, and password are required' });
     }
     const user = await DB.addUser({ name, email, password, roles: [{ role: Role.Diner }] });

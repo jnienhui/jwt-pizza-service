@@ -5,7 +5,7 @@ const { asyncHandler } = require('../endpointHelper.js');
 const { DB, Role } = require('../database/database.js');
 
 const authRouter = express.Router();
-const metrics = require('./metrics');
+const metrics = require('../metrics');
 authRouter.endpoints = [
   {
     method: 'POST',
@@ -78,7 +78,7 @@ authRouter.post(
 
     metrics.trackAuthAttempt(true);
     metrics.addUser();
-    
+
     res.json({ user: user, token: auth });
   })
 );

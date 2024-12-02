@@ -4,7 +4,7 @@ const { Role, DB } = require('../database/database.js');
 const { authRouter } = require('./authRouter.js');
 const { asyncHandler, StatusCodeError } = require('../endpointHelper.js');
 
-const metrics = require('./metrics');
+const metrics = require('../metrics');
 const orderRouter = express.Router();
 
 orderRouter.endpoints = [

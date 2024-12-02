@@ -37,13 +37,16 @@ class Metrics {
 
   incrementRequests(method) {
     this.totalRequests++;
+    console.log(method);
     if (this.requestsByMethod[method] !== undefined) {
+      console.log("increasing ", method);
       this.requestsByMethod[method]++;
     }
   }
 
   recordPizzaSale(revenue, numberOfItems, success) {
     if (success) {
+      console.log("increasing pizza sale", numberOfItems);
       this.pizzaMetrics.sold =+ numberOfItems;
       this.pizzaMetrics.revenue += revenue;
     } else {

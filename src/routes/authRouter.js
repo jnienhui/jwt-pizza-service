@@ -58,7 +58,7 @@ async function setAuthUser(req, res, next) {
 // Authenticate token
 authRouter.authenticateToken = (req, res, next) => {
   if (!req.user) {
-    metrics.recordAuthAttempt(false);
+    metrics.authFailure++;
 
     return res.status(401).send({ message: 'unauthorized' });
   }
@@ -76,8 +76,8 @@ authRouter.post(
     const user = await DB.addUser({ name, email, password, roles: [{ role: Role.Diner }] });
     const auth = await setAuth(user);
 
-    metrics.recordAuthAttempt(true);
-    metrics.addUser();
+    metrics.authSuccess++;
+    metrics.activeUsersCount++;
 
     res.json({ user: user, token: auth });
   })
@@ -91,8 +91,8 @@ authRouter.put(
     const user = await DB.getUser(email, password);
     const auth = await setAuth(user);
 
-    metrics.recordAuthAttempt(true);
-    metrics.addUser();
+    metrics.authSuccess++;
+    metrics.activeUsersCount++;
 
     res.json({ user: user, token: auth });
   })
@@ -104,7 +104,7 @@ authRouter.delete(
   authRouter.authenticateToken,
   asyncHandler(async (req, res) => {
     clearAuth(req);
-    metrics.removeUser();
+    metrics.activeUsersCount--;
     res.json({ message: 'logout successful' });
   })
 );

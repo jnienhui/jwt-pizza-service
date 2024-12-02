@@ -6,7 +6,8 @@ class Metrics {
     this.totalRequests = 0;
     this.requestsByMethod = { GET: 0, POST: 0, PUT: 0, DELETE: 0 };
     this.activeUsersCount = 0;
-    this.authAttempts = { success: 0, failure: 0 };
+    this.authSuccess = 0;
+    this.authFailure = 0;
     this.pizzaMetrics = { sold: 0, creationFailures: 0, revenue: 0, latencies: [] };
     this.serviceLatency = [];
   }
@@ -34,22 +35,6 @@ class Metrics {
     this.totalRequests++;
     if (this.requestsByMethod[method] !== undefined) {
       this.requestsByMethod[method]++;
-    }
-  }
-
-  addUser() {
-    this.activeUsersCount++;
-  }
-
-  removeUser() {
-    this.activeUsersCount--;
-  }
-
-  recordAuthAttempt(success) {
-    if (success) {
-      this.authAttempts.success++;
-    } else {
-      this.authAttempts.failure++;
     }
   }
 
@@ -82,6 +67,7 @@ class Metrics {
       try {
         this.sendHttpMetrics();
         this.sendAuthMetrics();
+        this.sendUserMetrics();
         this.sendSystemMetrics();
         this.sendPizzaMetrics();
         this.sendServiceLatencyMetrics();
@@ -99,8 +85,12 @@ class Metrics {
   }
 
   sendAuthMetrics() {
-    this.sendMetricToGrafana('auth', 'all', 'success', this.authAttempts.success);
-    this.sendMetricToGrafana('auth', 'all', 'failure', this.authAttempts.failure);
+    this.sendMetricToGrafana('auth', 'all', 'success', this.authSuccess);
+    this.sendMetricToGrafana('auth', 'all', 'failure', this.authFailure);
+  }
+
+  sendUserMetrics() {
+    this.sendMetricToGrafana('user', 'all', 'active', this.activeUsersCount);
   }
 
   sendSystemMetrics() {

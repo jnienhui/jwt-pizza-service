@@ -94,13 +94,12 @@ orderRouter.post(
         revenue += orderReq.items[i].price;
       }
       const numberOfItems = orderReq.items.length;
-      console.log("requestbody: ", orderReq);
       metrics.recordPizzaSale(revenue, numberOfItems, true)
 
       res.send({ order, jwt: j.jwt, reportUrl: j.reportUrl });
     } else {
-      metrics.recordPizzaSale(0, 0, pizzaLatency, false);
-      res.status(500).send({ message: 'Failed to fulfill order at factory', reportUrl: j.reportUrl });
+      metrics.recordPizzaSale(0, 0, false);
+      res.status(500).send({ message: 'Failed to fulfill order at factory', reportUrl: j.reportUrl, error: j.error });
     }
   })
 );

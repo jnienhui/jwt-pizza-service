@@ -90,11 +90,11 @@ orderRouter.post(
     });
 
     const j = await r.json();
-    const pizzaLatency = Date.now() - pizzaStartTime;
+    // const pizzaLatency = Date.now() - pizzaStartTime;
 
     if (r.ok) {
-      const revenue = order.items.reduce((sum, item) => sum + item.price, 0);
-      const numberOfItems = order.items.length;
+      //const revenue = order.items.reduce((sum, item) => sum + item.price, 0);
+      //const numberOfItems = order.items.length;
       // metrics.recordPizzaSale(revenue, numberOfItems, pizzaLatency, true)
       res.send({ order, jwt: j.jwt, reportUrl: j.reportUrl });
     } else {

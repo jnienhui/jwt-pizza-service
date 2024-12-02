@@ -36,6 +36,7 @@ class Metrics {
   }
 
   incrementRequests(method) {
+    this.totalRequests++;
     if (this.requestsByMethod[method] !== undefined) {
       this.requestsByMethod[method]++;
     }

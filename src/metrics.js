@@ -77,7 +77,7 @@ class Metrics {
   }
 
   // Send metrics periodically
-  startPeriodicReporting(period) {
+  sendMetricsPeriodically(period) {
     setInterval(() => {
       try {
         this.sendHttpMetrics();

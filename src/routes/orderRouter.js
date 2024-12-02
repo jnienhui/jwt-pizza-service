@@ -93,8 +93,12 @@ orderRouter.post(
     const pizzaLatency = Date.now() - pizzaStartTime;
 
     if (r.ok) {
-      const revenue = order.items.reduce((sum, item) => sum + item.price, 0);
-      const numberOfItems = order.items.length;
+      let revenue = 0;
+      for (let i = 0; i < req.body.items.length; i++){
+        revenue += req.body.items[i].price;
+      }
+      const numberOfItems = req.body.items.length;
+      console.log('pizza latency: %d, revenue: %d, numberofItems: %d', pizzaLatency, revenue, numberOfItems)
       metrics.recordPizzaSale(revenue, numberOfItems, pizzaLatency, true)
       res.send({ order, jwt: j.jwt, reportUrl: j.reportUrl });
     } else {

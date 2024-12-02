@@ -139,7 +139,6 @@ class Metrics {
 
   sendMetricToGrafana(metricPrefix, method, metricName, metricValue) {
     const metric = `${metricPrefix},source=${config.metrics.source},method=${method} ${metricName}=${metricValue}`;
-    console.log('Sending metrics to URL:', config.metrics.url); 
     fetch(`${config.metrics.url}`, {
       method: 'POST',
       body: metric,

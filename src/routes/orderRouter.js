@@ -80,7 +80,7 @@ orderRouter.post(
   asyncHandler(async (req, res) => {
     const orderReq = req.body;
 
-    const pizzaStartTime = Date.now();
+    // const pizzaStartTime = Date.now();
 
     const order = await DB.addDinerOrder(req.user, orderReq);
     const r = await fetch(`${config.factory.url}/api/order`, {

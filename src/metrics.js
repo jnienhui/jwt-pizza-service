@@ -1,4 +1,4 @@
-const config = require('./config.json');
+const config = require('./config.js');
 const os = require('os');
 
 class Metrics {

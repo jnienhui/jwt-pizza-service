@@ -127,14 +127,14 @@ class Metrics {
 
   sendServiceLatencyMetrics() {
     // Calculate average latency
-    const latencies = this.latencies;
+    const latencies = this.serviceLatency;
     if (latencies.length > 0) {
         const averageLatency = (latencies.reduce((a, b) => a + b, 0) / latencies.length).toFixed(2);
         this.sendMetricToGrafana('latencies', 'all', 'average_latency', averageLatency);
     }
 
     // Reset latencies to avoid duplication in the next report
-    this.latencies = [];
+    this.serviceLatency = [];
   }
 
   sendMetricToGrafana(metricPrefix, method, metricName, metricValue) {

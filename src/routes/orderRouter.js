@@ -4,7 +4,7 @@ const { Role, DB } = require('../database/database.js');
 const { authRouter } = require('./authRouter.js');
 const { asyncHandler, StatusCodeError } = require('../endpointHelper.js');
 
-const metrics = require('../metrics');
+// const metrics = require('../metrics');
 const orderRouter = express.Router();
 
 orderRouter.endpoints = [
@@ -95,10 +95,10 @@ orderRouter.post(
     if (r.ok) {
       const revenue = order.items.reduce((sum, item) => sum + item.price, 0);
       const numberOfItems = order.items.length;
-      metrics.recordPizzaSale(revenue, numberOfItems, pizzaLatency, true)
+      // metrics.recordPizzaSale(revenue, numberOfItems, pizzaLatency, true)
       res.send({ order, jwt: j.jwt, reportUrl: j.reportUrl });
     } else {
-      metrics.recordPizzaSale(0, 0, pizzaLatency, false);
+      // metrics.recordPizzaSale(0, 0, pizzaLatency, false);
       res.status(500).send({ message: 'Failed to fulfill order at factory', reportUrl: j.reportUrl });
     }
   })

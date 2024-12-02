@@ -36,7 +36,6 @@ class Metrics {
   }
 
   incrementRequests(method) {
-    console.log(method);
     if (this.requestsByMethod[method] !== undefined) {
       this.requestsByMethod[method]++;
     }
@@ -44,7 +43,7 @@ class Metrics {
 
   recordPizzaSale(revenue, numberOfItems, success) {
     if (success) {
-      this.pizzaMetrics.sold =+ numberOfItems;
+      this.pizzaMetrics.sold += numberOfItems;
       this.pizzaMetrics.revenue += revenue;
     } else {
       this.pizzaMetrics.creationFailures++;

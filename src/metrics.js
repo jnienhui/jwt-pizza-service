@@ -22,7 +22,6 @@ class Metrics {
   // };
   requestTracker(req, res, next) {
     const method = req.method;
-    console.log(method);
     this.incrementRequests(method);
     next();
   }
@@ -142,7 +141,7 @@ class Metrics {
         if (!response.ok) {
           console.error('Failed to push metrics data to Grafana');
         } else {
-          // console.log(`Pushed metric: ${metric}`);
+          console.log(`Pushed metric: ${metric}`);
         }
       })
       .catch((error) => {

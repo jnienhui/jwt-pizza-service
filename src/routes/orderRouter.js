@@ -5,6 +5,7 @@ const { authRouter } = require('./authRouter.js');
 const { asyncHandler, StatusCodeError } = require('../endpointHelper.js');
 
 const metrics = require('../metrics');
+const logger = require('../logger.js');
 const orderRouter = express.Router();
 
 orderRouter.endpoints = [
@@ -87,6 +88,13 @@ orderRouter.post(
     });
 
     const j = await r.json();
+    logger.log(logger.statusToLogLevel(r.status), 'factory', { authorized: 'true',
+      path: `${config.factory.url}/api/order`,
+      method: 'POST',
+      statusCode: r.status,
+      reqBody: JSON.stringify({ diner: { id: req.user.id, name: req.user.name, email: req.user.email }, order }),
+      resBody: JSON.stringify({ order, jwt: j.jwt, reportUrl: j.reportUrl }),
+    });
 
     if (r.ok) {
       let revenue = 0;

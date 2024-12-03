@@ -25,7 +25,7 @@ class Logger {
   }
 
   unhandledErrorLogger(err) {
-    this.log('error', 'unhandledError', { message: err.message, status: err.statusCode });
+    this.log('error', 'unhandledError', { message: err.message, stack: err.stack });
   }
 
   log(level, type, logData) {
